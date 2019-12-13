@@ -18,13 +18,6 @@ pipeline {
         }
 
         stage('Client') {
-          agent {
-            docker {
-              image 'node:6'
-              args '-u 0:0'
-            }
-
-          }
           steps {
             sh '''echo "Building the client"
 '''
