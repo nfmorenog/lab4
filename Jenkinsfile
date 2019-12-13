@@ -28,6 +28,7 @@ touch "tarjet/server.war"'''
           agent {
             docker {
               image 'node:6'
+              args '-u 0:0'
             }
 
           }
