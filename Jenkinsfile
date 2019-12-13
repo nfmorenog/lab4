@@ -11,7 +11,7 @@ pipeline {
         stage('Server') {
           agent {
             docker {
-              image 'maven:3.5-jdk-8-slim'
+              image 'maven:3.5.2-jdk-8'
             }
 
           }
@@ -40,6 +40,35 @@ cat > dist/index.html <<EOF
 Hello!
 EOF
 tocuh "dist/client.js"'''
+          }
+        }
+
+      }
+    }
+
+    stage('Test') {
+      parallel {
+        stage('chrome') {
+          agent {
+            docker {
+              image 'selenium/standalone-chrome'
+            }
+
+          }
+          steps {
+            sh 'echo \'mvn test -Dbrowser=chrome\''
+          }
+        }
+
+        stage('firefox') {
+          agent {
+            docker {
+              image 'selenium/standalone-firefox'
+            }
+
+          }
+          steps {
+            sh 'echo \'mvn test -Dbrowser=firefox\''
           }
         }
 
