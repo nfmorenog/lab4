@@ -4,12 +4,6 @@ pipeline {
     stage('Build') {
       parallel {
         stage('Server') {
-          agent {
-            docker {
-              image 'gradle:6.0.1-jdk-8'
-            }
-
-          }
           steps {
             sh '''echo "Building the server"
 '''
@@ -30,24 +24,12 @@ pipeline {
     stage('Test') {
       parallel {
         stage('chrome') {
-          agent {
-            docker {
-              image 'selenium/standalone-chrome'
-            }
-
-          }
           steps {
             sh 'echo \'gradle test -Dbrowser=chrome\''
           }
         }
 
         stage('firefox') {
-          agent {
-            docker {
-              image 'selenium/standalone-firefox'
-            }
-
-          }
           steps {
             sh 'echo \'gradle test -Dbrowser=firefox\''
           }
