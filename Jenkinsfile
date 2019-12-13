@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image 'maven:3.3.9-jdk-8'
+      image 'gradle:6.0.1-jdk-8'
     }
 
   }
@@ -17,7 +17,7 @@ pipeline {
           }
           steps {
             sh '''echo "Building the server"
-mvn -version
+gradle  -version
 mkdir -p tarjet
 touch "tarjet/server.war"'''
             stash(name: 'server', includes: '**/*.war')
@@ -56,7 +56,7 @@ tocuh "dist/client.js"'''
 
           }
           steps {
-            sh 'echo \'mvn test -Dbrowser=chrome\''
+            sh 'echo \'gradle test -Dbrowser=chrome\''
           }
         }
 
@@ -68,7 +68,7 @@ tocuh "dist/client.js"'''
 
           }
           steps {
-            sh 'echo \'mvn test -Dbrowser=firefox\''
+            sh 'echo \'gradle test -Dbrowser=firefox\''
           }
         }
 
