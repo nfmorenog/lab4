@@ -7,7 +7,6 @@ pipeline {
           steps {
             sh '''echo "Building the server"
 '''
-            stash(name: 'server', includes: '**/*.war')
           }
         }
 
