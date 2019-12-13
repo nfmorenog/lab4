@@ -6,23 +6,42 @@ pipeline {
 
   }
   stages {
-    stage('Initial') {
-      steps {
-        sh '''echo PATH = ${PATH}
-echo M2_HOME = ${M2_HOME}
-mvn clean'''
-      }
-    }
-
     stage('Build') {
-      steps {
-        sh 'mvn -Dmaven.test.failure.ignore=true install'
-      }
-    }
+      parallel {
+        stage('Server') {
+          agent {
+            docker {
+              image 'maven:3.5-jdk-8-slim'
+            }
 
-    stage('Report') {
-      steps {
-        junit 'target/reports/**/*.xml'
+          }
+          steps {
+            sh '''echo "Building the server"
+mvn -version
+mkdir -p tarjet
+touch "tarjet/server.war"'''
+            stash(name: 'server', includes: '**/*.war')
+          }
+        }
+
+        stage('Client') {
+          agent {
+            docker {
+              image 'node:6'
+            }
+
+          }
+          steps {
+            sh '''echo "Building the client"
+npm install --save react
+mkdir -p dist
+cat > dist/index.html <<EOF
+Hello!
+EOF
+tocuh "dist/client.js"'''
+          }
+        }
+
       }
     }
 
