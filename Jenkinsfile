@@ -1,10 +1,5 @@
 pipeline {
-  agent {
-    docker {
-      image 'gradle:6.0.1-jdk-8'
-    }
-
-  }
+  agent none
   stages {
     stage('Build') {
       parallel {
@@ -17,9 +12,7 @@ pipeline {
           }
           steps {
             sh '''echo "Building the server"
-gradle  -version
-mkdir -p tarjet
-touch "tarjet/server.war"'''
+'''
             stash(name: 'server', includes: '**/*.war')
           }
         }
@@ -34,12 +27,7 @@ touch "tarjet/server.war"'''
           }
           steps {
             sh '''echo "Building the client"
-npm install --save react
-mkdir -p dist
-cat > dist/index.html <<EOF
-Hello!
-EOF
-tocuh "dist/client.js"'''
+'''
           }
         }
 
@@ -72,6 +60,24 @@ tocuh "dist/client.js"'''
           }
         }
 
+        stage('iOS') {
+          steps {
+            sh 'echo "test en iOS"'
+          }
+        }
+
+      }
+    }
+
+    stage('Develop') {
+      steps {
+        sh 'echo "En desarrollo"'
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        sh 'echo "en produccion" '
       }
     }
 
