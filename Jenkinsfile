@@ -11,7 +11,7 @@ pipeline {
         stage('Server') {
           agent {
             docker {
-              image 'maven:3.5.2-jdk-8'
+              image 'gradle:6.0.1-jdk-8'
             }
 
           }
